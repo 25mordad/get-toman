@@ -1,0 +1,23 @@
+package configuration
+
+import (
+	"database/sql"
+)
+
+func DbConfig() string {
+	return "root:PASS@/DBNAME"
+}
+
+func GetDB() *sql.DB {
+	config := DbConfig()
+	db, err := sql.Open("mysql", config)
+	if err != nil {
+		panic(err.Error())
+	}
+	return db
+
+}
+
+func GetMargin() float64 {
+	return 0
+}
