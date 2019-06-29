@@ -20,7 +20,6 @@ func main() {
 
 	tgjuRate := getEuroTgju()
 	bazar360Rate := getEuroBazar360()
-
 	var tomanRate model.Tomanrate
 
 	tomanRate.Date = time.Now().Format("2006-01-02 15:04:05")
@@ -91,18 +90,14 @@ func getEuroBazar360() float64 {
 	thisRate := 0.0
 	////////////////// https://bazar360.com/en/Currencies/
 	i := 0
-	c.OnHTML("td.success", func(e *colly.HTMLElement) {
-		if strings.Trim(e.Text, " ") != "" {
-			i = i + 1
-			if i == 6 {
-				strArray := strings.Fields(strings.Trim(e.Text, " "))
-				thisRate, _ = strconv.ParseFloat(strings.Replace(strArray[0], ",", "", 1), 64)
-				fmt.Println("bazar360: ", thisRate)
-
-			}
-
+	c.OnHTML("tbody", func(e *colly.HTMLElement) {
+		if i == 9 {
+			// fmt.Println("bazar360: ", e.Text)
+			strArray := strings.Fields(strings.Trim(e.Text, " "))
+			thisRate, _ = strconv.ParseFloat(strings.Replace(strArray[0], ",", "", 1), 64)
+			fmt.Println("bazar360: ", thisRate)
 		}
-
+		i = i + 1
 	})
 
 	c.OnError(func(r *colly.Response, err error) {
